@@ -45,7 +45,8 @@ namespace IdentityApp.Controllers
                 }
 
                 /*
-                   mrtcnsc@gmail.com - Mert19071.                 
+                   mrtcnsc@gmail.com - Mert19071. 
+                   burak@gmail.com - 123456 - burakotan                
                 */
             }
             return View(model);

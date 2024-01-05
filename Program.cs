@@ -12,6 +12,21 @@ builder.Services.AddDbContext<IdentityContext>(
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();//IdentityContext.cs de database işlemlerini yapacağımdan onu yazdım
 
+//configure asp.net core identity ile kuralları değiştirebilirim,mresela parola kurallarını ve mail adresini bir kere kullanma, birde istersem username girilen karakterleri seçerek türkçe karakteri kapatabilirim
+
+builder.Services.Configure<IdentityOptions>(options => {
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+    
+    options.User.RequireUniqueEmail = true;
+    
+    options.User.AllowedUserNameCharacters = "abcdefgijklmnopqrstuvwxyz";
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
