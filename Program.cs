@@ -33,4 +33,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+IdentitySeedData.IdentityTestUser(app);//IdentitySeedData yani test verilerini ekledim
+
 app.Run();
