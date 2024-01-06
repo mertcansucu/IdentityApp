@@ -7,7 +7,7 @@
             <th>Id</th>
             <th>Name</th>
             <th>Email</th>
-            <th></th>
+            <th style="width: 125px;"></th>
         </tr>
     </thead>
     <tbody>
@@ -17,8 +17,11 @@
                 <td>@user.FullName</td>
                 <td>@user.Email</td>
                 <td>
-                    <a href="" class="btn btn-primary btn-sm">Edit</a>
-                    <a href="" class="btn btn-danger btn-sm">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-primary btn-sm">Edit</a>
+                    <form asp-action="Delete" method="post" onsubmit="return confirm('Emin misiniz?')" style="display: inline-block;"><!--onsubmit="return confirm('Emin misiniz?')" js ile bunu sorup sonra silmeyi gerçekleştiriyorum bunun diğer yolu postun yanında get metodu daha ekleyip sil butonuna basınca başka ekrana gidip orda emin misin diye sordurup sonra silmek ama buda diğer yol-->
+                        <input type="hidden" value="@user.Id" name="id"><!--kullanıcın idsini alıp o kullanıcıyı silmek için-->
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
                 </td>
             </tr>          
         }
