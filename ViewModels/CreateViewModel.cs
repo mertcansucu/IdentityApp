@@ -10,7 +10,8 @@ namespace IdentityApp.ViewModels
     public class CreateViewModel
     {
         [Required]
-        public string UserName { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+        //Username e gerek görmediğim için kaldırdım fullname i alıcam direk
 
         [Required]
         [EmailAddress]

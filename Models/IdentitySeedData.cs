@@ -9,7 +9,7 @@ namespace IdentityApp.Models
 {
     public class IdentitySeedData
     {
-        private const string adminUser = "Admin";
+        private const string adminUser = "admin";//bazı kısıtlamalar eklediğim için ve ona takılmasın diye böyle yaptım
         private const string adminPassword = "Admin_123";
 
         public static async void IdentityTestUser(IApplicationBuilder app){
@@ -20,13 +20,14 @@ namespace IdentityApp.Models
                 context.Database.Migrate();
             }
 
-            var userManager = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();//user veritabanını çağırdım
+            var userManager = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<UserManager<AppUser>>();//user veritabanını çağırdım
 
             var user = await userManager.FindByNameAsync(adminUser);//user içine adminUser a bak kayıtlı biri var mı diye eğer yoksa da yeni kayıt oluşturdum,veritabanında admin adında bir kullanıcı yoksa
 
             if (user == null)
             {
-                user = new IdentityUser {
+                user = new AppUser {
+                    FullName = "Mert Can Sucu",
                     UserName = adminUser,
                     Email = "mrtcnscc@gmail.com",
                     PhoneNumber = "5454414690"
