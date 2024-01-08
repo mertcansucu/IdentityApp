@@ -6,6 +6,7 @@ using IdentityApp.Models;
 using IdentityApp.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace IdentityApp.Controllers
@@ -28,9 +29,13 @@ namespace IdentityApp.Controllers
         */
         private UserManager<AppUser> _userManager;//usertablosundaki verileri veritabnından getirdim
 
-        public UsersController(UserManager<AppUser> userManager)
+        private RoleManager<AppRole> _roleManager;//roletablosundaki verileri veritabnından getirdim
+
+        public UsersController(UserManager<AppUser> userManager,RoleManager<AppRole> roleManager)
         {
             _userManager = userManager;
+
+            _roleManager = roleManager;
         }
         public IActionResult Index(){
             return View(_userManager.Users);//user bilgilerini getirip view içine gönderdim
@@ -76,10 +81,13 @@ namespace IdentityApp.Controllers
 
             if (user != null)
             {
+                ViewBag.Roles = await _roleManager.Roles.Select(i => i.Name).ToListAsync();//viewbag üzerinden ben role tablosundan sadece role isimlerini aldım ve kullanıcı seçsin diye view sayfasında burdan aldığım bilgileri getirip seçtiricem
+
                 return View(new EditViewModel{
                     Id = user.Id,
                     FullName = user.FullName,
-                    Email = user.Email
+                    Email = user.Email,
+                    SelectedRoles = await _userManager.GetRolesAsync(user)//bu komutla kullanıcıya atanmış rolleri ben alabilicem veritabanından ve sayfada göstericem
                 }); 
             }
             
