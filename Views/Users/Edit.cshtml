@@ -35,9 +35,18 @@
         <div class="card-body">
             @foreach(var role in ViewBag.Roles){
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" name="" id="@role">
+                    <input type="checkbox" 
+                    class="form-check-input" 
+                    name="SelectedRoles" 
+                    value="@role" 
+                    id="@role"
+                    @(Model.SelectedRoles.Any(i => i == role) ? "checked": "")
+                    >
                     <label for="@role" class="form-check-label">@role</label>
-                    <!--id ile for aynı olmalı =>role-->
+                    <!--id ile for aynı olmalı =>role
+                    name="SelectedRoles" editviewmodel de ki değeri verdim value="@role" bu şekilde seçilen rolleri dizi olarak namelerini alacak bunları ayarlayıp yapmak istediğim usera ben eğer rol atarsam bunları usera eklesin diye
+                    @(Model.SelectedRoles.Any(i => i == role) ? "checked": "") ben burdaki kodda diyorum ki veritabında bak eğer seçilmiş rol varsa onun ceheckboxını doldur seçilmemişse boş getir
+                    -->
                 </div>
             }
         </div>
