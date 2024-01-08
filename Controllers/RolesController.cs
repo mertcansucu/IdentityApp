@@ -20,7 +20,7 @@ namespace IdentityApp.Controllers
         }
 
         public IActionResult Index(){
-            return View();
+            return View(_roleManager.Roles);//_roleManager.Roles =>IQueryable bir nesnedir yani ben bunu filtreleyip veri tabanına sorgu yazıp istediğim şekilde çekebilirim
         }
 
         public IActionResult Create(){
@@ -44,7 +44,7 @@ namespace IdentityApp.Controllers
                     ModelState.AddModelError("",err.Description);
                 }
             }
-            
+
             return View(model);
         }
 
