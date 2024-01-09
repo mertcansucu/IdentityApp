@@ -21,7 +21,7 @@
             <td asp-role-users="@role.Id"></td><!--Kendi Tag Helper ımı oluşturdum ve role listesinde o role ait kullanıcıları listeliyicem,asp-role-users adında bir metod tanımlıyıcam ve bu metoda dışarıdan role.Id bilgisini göndericem ve o role ait kullanıcıları getirecek ve bunlarda bu td içinde listenecek-->
             <td>
                 <form method="post">
-                    <a  class="btn btn-primary btn-sm">Edit</a>
+                    <a  class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@role.Id">Edit</a>
                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                 </form>
             </td>
