@@ -18,7 +18,7 @@
         <tr>
             <td>@role.Id</td>
             <td>@role.Name</td>
-            <td>Kullanıcı Listesi</td>
+            <td asp-role-users="@role.Id"></td><!--Kendi Tag Helper ımı oluşturdum ve role listesinde o role ait kullanıcıları listeliyicem,asp-role-users adında bir metod tanımlıyıcam ve bu metoda dışarıdan role.Id bilgisini göndericem ve o role ait kullanıcıları getirecek ve bunlarda bu td içinde listenecek-->
             <td>
                 <form method="post">
                     <a  class="btn btn-primary btn-sm">Edit</a>

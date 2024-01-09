@@ -49,7 +49,11 @@ namespace IdentityApp.Controllers
         public async Task<IActionResult> Create(CreateViewModel model){
             if (ModelState.IsValid)
             {
-                var user = new AppUser{UserName = model.Email, Email = model.Email,FullName = model.FullName};//kullanıcının username i olmalı ben bunu direk email yaptım böylece kullanıcı direk emaili username oldu
+                var user = new AppUser{
+                    UserName = model.UserName, 
+                    Email = model.Email,
+                    FullName = model.FullName};//kullanıcının username i olmalı ben bunu direk email yaptım böylece kullanıcı direk emaili username oldu
+                    //username ismini direkt mail adresi yaptım ama bunu değiştirebilirim, bu şekilde model.FullName.ToLower().Replace(" ", "")+new Random().Next(1,9999999), yada kullanıcı kaydında usernamede yaz derim
 
                 IdentityResult result = await _userManager.CreateAsync(user,model.Password);
                 //await _userManager.CreateAsync(user); şifresizde kayıt yapabilirim ama kullancı girişi olduğu için uygulamamda böyle yaptım

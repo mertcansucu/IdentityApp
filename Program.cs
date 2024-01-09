@@ -24,6 +24,9 @@ builder.Services.Configure<IdentityOptions>(options => {
     options.Password.RequiredLength = 6;
     
     options.User.RequireUniqueEmail = true;
+
+    options.User.AllowedUserNameCharacters = "abcdefghiıjklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
     
     // options.User.AllowedUserNameCharacters = "abcdefgijklmnopqrstuvwxyz"; bunu yorum satırı yaptım çünkü ben username için mail adresini otomatik yaptım ve mail adresin de @ ve . olduğu için hata verdi buna engel olmak için, bunun yerine önceki haliyle username ayrı bir şekilde alabilirim ama buna şimdilik gerek olmadığı için yapmadım
 });
