@@ -40,13 +40,20 @@
                     name="SelectedRoles" 
                     value="@role" 
                     id="@role"
-                    @(Model.SelectedRoles.Any(i => i == role) ? "checked": "")
-                    >
-                    <label for="@role" class="form-check-label">@role</label>
-                    <!--id ile for aynı olmalı =>role
-                    name="SelectedRoles" editviewmodel de ki değeri verdim value="@role" bu şekilde seçilen rolleri dizi olarak namelerini alacak bunları ayarlayıp yapmak istediğim usera ben eğer rol atarsam bunları usera eklesin diye
-                    @(Model.SelectedRoles.Any(i => i == role) ? "checked": "") ben burdaki kodda diyorum ki veritabında bak eğer seçilmiş rol varsa onun ceheckboxını doldur seçilmemişse boş getir
-                    -->
+                    
+                    @if(Model.SelectedRoles != null)
+                    {
+
+                        @(Model.SelectedRoles.Any(i => i == role) ? "checked": "")
+                        
+                    }>
+                    <!--ben burda dedim ki eğer bir ceheck seçildiyse çalış, boş olma durumunu kapattım-->
+
+                        <label for="@role" class="form-check-label">@role</label>
+                        <!--id ile for aynı olmalı =>role
+                            name="SelectedRoles" editviewmodel de ki değeri verdim value="@role" bu şekilde seçilen rolleri dizi olarak namelerini alacak bunları ayarlayıp yapmak istediğim usera ben eğer rol atarsam bunları usera eklesin diye
+                            @(Model.SelectedRoles.Any(i => i == role) ? "checked": "") ben burdaki kodda diyorum ki veritabında bak eğer seçilmiş rol varsa onun ceheckboxını doldur seçilmemişse boş getir
+                        -->
                 </div>
             }
         </div>
