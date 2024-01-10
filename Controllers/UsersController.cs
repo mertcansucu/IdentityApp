@@ -41,40 +41,7 @@ namespace IdentityApp.Controllers
             return View(_userManager.Users);//user bilgilerini getirip view içine gönderdim
         }
 
-        public IActionResult Create(){
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateViewModel model){
-            if (ModelState.IsValid)
-            {
-                var user = new AppUser{
-                    UserName = model.UserName, 
-                    Email = model.Email,
-                    FullName = model.FullName};//kullanıcının username i olmalı ben bunu direk email yaptım böylece kullanıcı direk emaili username oldu
-                    //username ismini direkt mail adresi yaptım ama bunu değiştirebilirim, bu şekilde model.FullName.ToLower().Replace(" ", "")+new Random().Next(1,9999999), yada kullanıcı kaydında usernamede yaz derim
-
-                IdentityResult result = await _userManager.CreateAsync(user,model.Password);
-                //await _userManager.CreateAsync(user); şifresizde kayıt yapabilirim ama kullancı girişi olduğu için uygulamamda böyle yaptım
-
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("Index");
-                }
-
-                foreach (IdentityError err in result.Errors)
-                {
-                    ModelState.AddModelError("",err.Description);
-                }
-
-                /*
-                   mrtcnsc@gmail.com - Mert19071. 
-                   burak@gmail.com - 123456 username artık direk email oldu öyle ayarladım                
-                */
-            }
-            return View(model);
-        }
+        
 
         public async Task<IActionResult> Edit(string id){
             if (id == null)

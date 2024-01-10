@@ -43,6 +43,13 @@ namespace IdentityApp.Controllers
                 {
                     await _signInManager.SignOutAsync();//başlangıçta kullanıcı daha önce giriş yapmışsa cookie sini sıfırladım
 
+                    //IsEmailConfirmedAsync hesap email onayı getirdim bu şekilde kullanıcı emailini onaylarsa ture olacak ve giriş yapabilecek
+                    if (!await _userManager.IsEmailConfirmedAsync(user))
+                    {
+                        ModelState.AddModelError("","Hesabınızı email üzerinden onaylayınız");
+                        return View(model);
+                    }
+
                     //yeni cookie oluşturdum
                     var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe,true);
                     /*
@@ -78,5 +85,73 @@ namespace IdentityApp.Controllers
 
             return View(model);
         }
+
+        //kullanıcı ekleme kısmını userdan buraya taşıdım çünkü mail onayda ekliyicem
+        public IActionResult Create(){
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateViewModel model){
+            if (ModelState.IsValid)
+            {
+                var user = new AppUser{
+                    UserName = model.UserName, 
+                    Email = model.Email,
+                    FullName = model.FullName};
+                    //username ismini direkt mail adresi yaptım ama bunu değiştirebilirim, bu şekilde model.FullName.ToLower().Replace(" ", "")+new Random().Next(1,9999999), yada kullanıcı kaydında usernamede yaz derim
+
+                IdentityResult result = await _userManager.CreateAsync(user,model.Password);
+                //await _userManager.CreateAsync(user); şifresizde kayıt yapabilirim ama kullancı girişi olduğu için uygulamamda böyle yaptım
+
+                if (result.Succeeded)
+                {
+                    //email token oluşturdum,bunu yapmakmiçin programcs de AddDefaultTokenProviders() bunu ekledim
+                    var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                    var url = Url.Action("ConfirmEmail","Account",new{user.Id, token});//url oluşturken altta yeni bir metod tanımladım ve orda email onaylama sayfası olacak ve onun için de gerekli kısımları oraya yazdım
+
+                    //email
+
+                    TempData["message"] = "Email Hesabınızdaki onay mailini tıklayınız";
+                    return RedirectToAction("Login","Account");
+                }
+
+                foreach (IdentityError err in result.Errors)
+                {
+                    ModelState.AddModelError("",err.Description);
+                }
+
+                /*
+                   mrtcnsc@gmail.com - Mert19071. 
+                   burak@gmail.com - 123456 username artık direk email oldu öyle ayarladım                
+                */
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> ConfirmEmail(string Id, string token){
+            if (Id == null || token == null)
+            {
+                TempData["message"] = "Geçersiz token bilgisi";
+                return View();
+            }
+
+            var user =await _userManager.FindByIdAsync(Id);
+
+            if (user != null)
+            {
+                var result = await _userManager.ConfirmEmailAsync(user,token);//ben burda veritabında email onayını 0 dan 1 yaptım
+
+                if (result.Succeeded)
+                {
+                    TempData["message"] = "Hesabınız onaylandı";
+                    return RedirectToAction("Login","Account");
+                }
+            }
+
+            TempData["message"] = "Kullanıcı bulunamadı";
+            return View();
+        } 
     }
 }

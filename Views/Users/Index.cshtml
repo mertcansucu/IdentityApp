@@ -1,6 +1,6 @@
 @model IEnumerable<AppUser>
 
-<a class="btn btn-primary" asp-action="Create">Create User</a>
+<a class="btn btn-primary" asp-controller="Account" asp-action="Create">Create User</a><!--asp-controller="Account" böyle yapmamın nedeni ben bu kısmı userda accounta taşıdım-->
 <table class="table table-sm table-bordered">
     <thead>
         <tr>

@@ -10,11 +10,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<IdentityContext>(
     options => options.UseSqlite(builder.Configuration["ConnectionStrings:SqLite_Connection"]));//vuraya birden fazla database ekleyebilirim
 
-builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<IdentityContext>();//IdentityContext.cs de database işlemlerini yapacağımdan onu yazdım
+builder.Services.AddIdentity<AppUser, AppRole>().AddEntityFrameworkStores<IdentityContext>().AddDefaultTokenProviders();//IdentityContext.cs de database işlemlerini yapacağımdan onu yazdım
 //IdentityUser => yerine ben artık AppUser la çalışıcam çünkü ekstra kullanıcı bilgilerini almak için oluşturdum
 //IdentityRole ektradan rolleride oluşturduğum clastan artık alacağım için değitirdim
 
 //configure asp.net core identity ile kuralları değiştirebilirim,mresela parola kurallarını ve mail adresini bir kere kullanma, birde istersem username girilen karakterleri seçerek türkçe karakteri kapatabilirim
+
+//**AddDefaultTokenProviders() bu bize->parola yenileme,sıfırlama,email sıfırlama email onaylı hale getirmek için bize token bilgisi üretir
 
 builder.Services.Configure<IdentityOptions>(options => {
     options.Password.RequireDigit = false;
@@ -33,6 +35,10 @@ builder.Services.Configure<IdentityOptions>(options => {
     //kullanıcı login işleminde ben kullanıcıya 5 hak vericem eğer 5 seferde login olamazsa hesabını 5 dk kitliyicem ve kullanıcı giriş yapamıyacak
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;
+
+
+    //giriş için email onayı olmasını istediğim için bunu aktif etmem lazım başlangıçta bu false du nem bunu aktif yaptım
+    options.SignIn.RequireConfirmedEmail = true;
 });
 
 builder.Services.ConfigureApplicationCookie(options =>{//cookie ayarları
