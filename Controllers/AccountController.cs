@@ -17,16 +17,20 @@ namespace IdentityApp.Controllers
 
         private SignInManager<AppUser> _signInManager;
 
+        private IEmailSender _emailSender;
+
         public AccountController(
             UserManager<AppUser> userManager,
             RoleManager<AppRole> roleManager,
-            SignInManager<AppUser> signInManager)
+            SignInManager<AppUser> signInManager,IEmailSender emailSender)
         {
             _userManager = userManager;
 
             _roleManager = roleManager;
 
             _signInManager = signInManager;//login işlemi olunca kullanıcıya cookie bilgisi göndermek için ekledim
+
+            _emailSender = emailSender;
         }
         public IActionResult Login(){
             return View();
@@ -111,8 +115,11 @@ namespace IdentityApp.Controllers
 
                     var url = Url.Action("ConfirmEmail","Account",new{user.Id, token});//url oluşturken altta yeni bir metod tanımladım ve orda email onaylama sayfası olacak ve onun için de gerekli kısımları oraya yazdım
 
-                    //email
+                    // email
+                    //http://localhost:5284/
+                    await _emailSender.SendEmailAsync(user.Email, "Hesap Onayı", $"Lütfen email hesabınızı onaylamak için linke <a href='http://localhost:5284{url}'>tıklayınız.</a>");
 
+                    
                     TempData["message"] = "Email Hesabınızdaki onay mailini tıklayınız";
                     return RedirectToAction("Login","Account");
                 }

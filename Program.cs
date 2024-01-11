@@ -4,7 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+//IEmailSender, SmtpEmailSender burda ben IEmailSender çağırıp SmtpEmailSender ile mesaj oluşturucam bunun yerine api kullanarak yapmak istersemde SmtpEmailSender yerine onu yazıcam
+builder.Services.AddScoped<IEmailSender, SmtpEmailSender>(i => new SmtpEmailSender(
+    builder.Configuration["EmailSender:Host"],
+    builder.Configuration.GetValue<int>("EmailSender:Port"),    
+    builder.Configuration.GetValue<bool>("EmailSender:EnableSSl"),    
+    builder.Configuration["EmailSender:Username"],   
+    builder.Configuration["EmailSender:Password"])
+);
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<IdentityContext>(
