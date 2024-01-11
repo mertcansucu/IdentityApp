@@ -165,5 +165,37 @@ namespace IdentityApp.Controllers
             await _signInManager.SignOutAsync();//network altında oluşan cookie yi sildi
             return RedirectToAction("Login");
         }
+
+        public IActionResult ForgotPassword(){
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(string Email){
+            if (string.IsNullOrEmpty(Email))//eğer email alanı boşsa sayfayı tekrar gönder dedim
+            {
+                TempData["message"] = "Email adresini giriniz !";
+                return View();
+            }
+
+            var user = await _userManager.FindByEmailAsync(Email);//burda yazdığım mail adresiyle uyumlu olan bir user var mı diye baktım 
+            if (user == null)//eğer eşleşen bir kullanıcı yoksa sayfayı bir daha gönderdim 
+            {
+                TempData["message"] = "Bu Email adresiyle eşleşen kullanıcı bulunmamaktadır. Lütfen tekrar giriniz!";
+                return View();
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);//şifre sıfırlama için o kullanıcı için bir token oluşturdum
+            var url = Url.Action("ResetPassword","Account",new{user.Id, token});//url oluşturken altta yeni bir metod tanımladım
+
+            // email, buda kullanıcıya mail ile diyorum ki bu linke tıklayıp şifreni sıfırla
+            //http://localhost:5284/
+            await _emailSender.SendEmailAsync(Email, "Parola Sıfırlama", $"Parolanızı yenilemek için linke <a href='http://localhost:5284{url}'>tıklayınız.</a>");
+
+            TempData["message"] = "Email adresinize gönderilen link ile şifrenizi sıfırlayabilirsiniz.";
+
+            return View();
+            
+        }
     }
 }
