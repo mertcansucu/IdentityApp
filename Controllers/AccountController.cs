@@ -186,7 +186,7 @@ namespace IdentityApp.Controllers
             }
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);//şifre sıfırlama için o kullanıcı için bir token oluşturdum
-            var url = Url.Action("ResetPassword","Account",new{user.Id, token});//url oluşturken altta yeni bir metod tanımladım
+            var url = Url.Action("ResetPassword","Account",new{user.Id, token,Email});//url oluşturken altta yeni bir metod tanımladım
 
             // email, buda kullanıcıya mail ile diyorum ki bu linke tıklayıp şifreni sıfırla
             //http://localhost:5284/
@@ -196,6 +196,47 @@ namespace IdentityApp.Controllers
 
             return View();
             
+        }
+
+        public IActionResult ResetPassword(string Id,string token,string Email){
+            //var url = Url.Action("ResetPassword","Account",new{user.Id, token}yukarıda zaten bu bilgileri alıyorum ben bu sayfaya bu bilgileri gönderip yeni şifre oluşturup, şifreyi güncelliyicem
+
+            if (Id == null || token == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var model = new ResetPasswordModel {Token = token};
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model){
+            if (ModelState.IsValid)
+            {
+                
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user == null)
+                {
+                    TempData["message"] = "Bu mail adresiyle eşleşen kullanıcı yok";
+                    return RedirectToAction("Login");
+                }
+                var result = await _userManager.ResetPasswordAsync(user, model.Token,model.Password);
+
+                if (result.Succeeded)
+                {
+                    TempData["message"] = "Şifreniz değiştirildi";
+                    return RedirectToAction("Login");
+                }
+
+                foreach (IdentityError err in result.Errors)
+                {
+                    ModelState.AddModelError("",err.Description);
+                }
+            }
+
+            return View(model);
         }
     }
 }
