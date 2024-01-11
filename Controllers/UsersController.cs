@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityApp.Models;
 using IdentityApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace IdentityApp.Controllers
 {
+    [Authorize(Roles ="admin")]//ben burda diyorum ki rolü admin olan kişiler sadece burdaki linklere erişebilsin, yani normal bir kullanıcı girip de linke users yapıp o sayfaya gidebiliyordu onu engelledim
     public class UsersController:Controller
     {
         /*
@@ -37,6 +39,9 @@ namespace IdentityApp.Controllers
 
             _roleManager = roleManager;
         }
+
+        //[AllowAnonymous]//**bunu dersem diyorum ki admin rolündeki bir kişi burdaki linklere gidebiliyordu ama ben bunu diyerek diyorum ki bu sayfaya bütün rollerdeki kullanıcılar gitsin diğerler linklere ise bütün kullanıcılar gidebilsin diyorum
+        //ya da şöyle yaparım ben buraya [Authorize(Roles ="admin")] bunu diyerek sadece buraya admin rolündeki sadece gitsin ama diğer linklere herkes gidebilir diyebilirim
         public IActionResult Index(){
             return View(_userManager.Users);//user bilgilerini getirip view içine gönderdim
         }

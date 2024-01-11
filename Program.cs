@@ -51,7 +51,7 @@ builder.Services.Configure<IdentityOptions>(options => {
 
 builder.Services.ConfigureApplicationCookie(options =>{//cookie ayarları
     options.LoginPath = "/Account/Login";//default halide bu login girişi için buraya yönlendirir beni
-    options.AccessDeniedPath = "/Account/AccessDenied";//giriş yapan kullanıcı rolü yani yetkisi yetersizse sayfalara erişmesini engelliyorum ve kullanıcıya yetkisiz kişi olduğunu söylüyorum
+    options.AccessDeniedPath = "/Account/AccessDenied";//giriş yapan kullanıcı rolü yani yetkisi yetersizse sayfalara erişmesini engelliyorum ve kullanıcıya yetkisiz kişi olduğunu söylüyorum,usercontrollera eklediğim kod ile yetkisiz biri yetkisi dışında bir yere gitmek istediğinde bu sayfaya yönlendirilecek
     options.SlidingExpiration = true;
     options.ExpireTimeSpan = TimeSpan.FromDays(30);//ben bu yazdığım iki kodla diyorum ki kullanıcı 30 gün içerisinde giriş yapsın veya yapmasın cookisini sakla sonra sil, ama diyelim 15. gün ben giriş yaptım süre 30 gün olarak yeniden başlar sonra kayıt silinir ve kullanıcı yeniden giriş yaparak giriş yapmalıdır
     
